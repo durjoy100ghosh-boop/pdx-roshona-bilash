@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PDX Roshona Bilash — Blank POS</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--text:#171a21;--muted:#6b7280;--line:#e5e7eb;--accent:#6d28d9;--danger:#b91c1c}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select{font:inherit}button{cursor:pointer}
+.app{min-height:100vh;display:flex}.side{width:230px;background:#18131e;color:#fff;position:fixed;inset:0 auto 0 0;padding:20px 14px}.brand{font-weight:800;font-size:17px;padding:7px 10px 22px}.brand small{display:block;color:#bdb5c9;font-weight:500;margin-top:5px}
+.nav button{display:block;width:100%;text-align:left;background:none;color:#dcd6e4;border:0;border-radius:10px;padding:12px;margin:2px 0}.nav button.active,.nav button:hover{background:#2b2234;color:#fff}
+.main{margin-left:230px;width:calc(100% - 230px);padding:22px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.top h1{margin:0;font-size:24px}.date{font-size:13px;background:#eee9f7;color:#5b21b6;padding:8px 11px;border-radius:999px}
+.page{display:none}.page.active{display:block}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}.muted{color:var(--muted);font-size:13px}.metric{font-size:25px;font-weight:800;margin-top:6px}
+.section{margin-top:18px}.section h2{font-size:17px;margin:0 0 11px}.tablewrap{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:auto}table{border-collapse:collapse;width:100%;min-width:650px}th,td{padding:11px 13px;border-bottom:1px solid var(--line);text-align:left;font-size:14px}th{font-size:12px;color:var(--muted);background:#fafafa}
+.btn{border:0;border-radius:9px;padding:10px 13px;background:var(--accent);color:#fff;font-weight:700}.btn.gray{background:#eeeaf2;color:#302538}.btn.red{background:#fee2e2;color:#991b1b}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}.input,.select{border:1px solid var(--line);border-radius:9px;background:#fff;padding:10px 11px;outline:none}.input:focus,.select:focus{border-color:#a78bfa}
+.bill-layout{display:grid;grid-template-columns:1fr 420px;gap:16px}.blank-box{min-height:510px;background:#fff;border:1px dashed #cfd3da;border-radius:14px;padding:18px}.blank-note{text-align:center;padding-top:150px;color:var(--muted)}
+.billbox{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;position:sticky;top:16px}.billhead{display:flex;justify-content:space-between;align-items:center}.billitems{margin-top:10px}.lineitem{display:grid;grid-template-columns:1fr 90px 95px 34px;gap:7px;margin:8px 0;align-items:center}.lineitem input{width:100%;padding:8px;border:1px solid var(--line);border-radius:8px}.remove{width:34px;height:34px;border:0;border-radius:8px;background:#fee2e2;color:#991b1b}.totals{margin-top:16px;border-top:1px solid var(--line);padding-top:10px}.row{display:flex;justify-content:space-between;padding:6px 0}.grand{font-size:20px;font-weight:800}
+.formgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}.field input,.field select{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;background:#fff}
+.folderbar{display:flex;gap:10px;flex-wrap:wrap}.folder{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;min-height:105px}.folders{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.folder b{display:block;margin-bottom:6px}
+.mobilebar{display:none}
+.modal{display:none;position:fixed;inset:0;background:#0008;align-items:center;justify-content:center;padding:18px;z-index:20}.modal.open{display:flex}.modalbox{background:#fff;border-radius:15px;padding:18px;width:min(650px,100%);max-height:90vh;overflow:auto}.close{float:right;border:0;background:#eee;border-radius:8px;padding:6px 10px}
+@media(max-width:950px){.side{display:none}.main{margin-left:0;width:100%;padding:15px 14px 82px}.grid{grid-template-columns:repeat(2,1fr)}.bill-layout{grid-template-columns:1fr}.billbox{position:static}.folders{grid-template-columns:repeat(2,1fr)}.formgrid{grid-template-columns:1fr 1fr}.mobilebar{display:flex;position:fixed;bottom:0;left:0;right:0;background:#18131e;padding:7px;z-index:15;justify-content:space-around}.mobilebar button{background:none;color:#ddd;border:0;font-size:11px;padding:4px 7px}.mobilebar button.active{color:white}}
+@media(max-width:550px){.grid{grid-template-columns:1fr 1fr}.folders{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.lineitem{grid-template-columns:1fr 80px 85px 34px}.top h1{font-size:20px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="side">
+<div class="brand">PDX Roshona Bilash<small>Blank POS & Stock</small></div>
+<div class="nav">
+<button data-page="dashboard" class="active">▣ Dashboard</button>
+<button data-page="billing">▤ New Bill</button>
+<button data-page="stock">▦ Stock</button>
+<button data-page="history">◫ Sales History</button>
+<button data-page="settings">⚙ GST & Settings</button>
+</div>
+</aside>
+
+<main class="main">
+<div class="top"><h1 id="title">Dashboard</h1><span class="date" id="date"></span></div>
+
+<section id="dashboard" class="page active">
+<div class="grid">
+<div class="card"><div class="muted">Today's Sales</div><div class="metric" id="dSales">₹0.00</div></div>
+<div class="card"><div class="muted">Bills Today</div><div class="metric" id="dBills">0</div></div>
+<div class="card"><div class="muted">Items Sold</div><div class="metric" id="dItems">0</div></div>
+<div class="card"><div class="muted">Stock Folders</div><div class="metric" id="dFolders">0</div></div>
+</div>
+<div class="section"><h2>Recent Bills</h2><div class="tablewrap"><table><thead><tr><th>Bill</th><th>Time</th><th>Items</th><th>Total</th></tr></thead><tbody id="recent"></tbody></table></div></div>
+</section>
+
+<section id="billing" class="page">
+<div class="bill-layout">
+<div class="blank-box">
+<div class="toolbar"><button class="btn" onclick="addLine()">+ Add Item</button><button class="btn gray" onclick="clearBill()">Clear Bill</button></div>
+<div class="muted">Type the item name and quantity yourself. No preset menu is shown.</div>
+<div id="lines" style="margin-top:15px"></div>
+<div id="emptyLine" class="blank-note">No items added.<br>Click “+ Add Item” and type everything manually.</div>
+</div>
+<div class="billbox">
+<div class="billhead"><b>Bill</b><span class="muted">#<span id="billNo"></span></span></div>
+<div style="margin-top:12px"><label class="muted">Default GST % for this bill</label><input id="billGST" class="input" style="width:100%;margin-top:5px" type="number" min="0" step="0.01" value="0" oninput="calcBill()"></div>
+<div class="totals">
+<div class="row"><span>Subtotal</span><b id="bSub">₹0.00</b></div>
+<div class="row"><span>GST</span><b id="bGST">₹0.00</b></div>
+<div class="row"><span>Grand Total</span><b class="grand" id="bGrand">₹0.00</b></div>
+</div>
+<div style="margin-top:12px"><select id="payment" class="select" style="width:100%"><option>Cash</option><option>UPI</option><option>Card</option></select></div>
+<button class="btn" style="width:100%;margin-top:10px" onclick="saveBill()">Save Bill & Print</button>
+</div>
+</div>
+</section>
+
+<section id="stock" class="page">
+<div class="toolbar"><button class="btn" onclick="openFolder()">+ New Stock Folder</button></div>
+<div class="muted" style="margin-bottom:12px">Create your own folders, then type all stock entries manually inside each folder.</div>
+<div id="folders" class="folders"></div>
+</section>
+
+
+<section id="history" class="page">
+  <div class="card" style="margin-bottom:14px">
+    <div class="toolbar" style="margin-bottom:0">
+      <input id="historySearch" class="input" placeholder="Search bill no., item, payment..." oninput="renderHistory()">
+      <input id="historyFrom" class="input" type="date" onchange="renderHistory()">
+      <input id="historyTo" class="input" type="date" onchange="renderHistory()">
+      <button class="btn gray" onclick="clearHistoryFilters()">Clear Filters</button>
+    </div>
+  </div>
+
+  <div class="grid" style="margin-bottom:14px">
+    <div class="card"><div class="muted">Filtered Sales</div><div class="metric" id="hSales">₹0.00</div></div>
+    <div class="card"><div class="muted">Filtered Bills</div><div class="metric" id="hBills">0</div></div>
+    <div class="card"><div class="muted">Filtered Items</div><div class="metric" id="hItems">0</div></div>
+    <div class="card"><div class="muted">Filtered GST</div><div class="metric" id="hGST">₹0.00</div></div>
+  </div>
+
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Bill</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Items</th>
+          <th>Subtotal</th>
+          <th>GST</th>
+          <th>Total</th>
+          <th>Payment</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="historyTable"></tbody>
+    </table>
+  </div>
+</section>
+
+<section id="settings" class="page">
+<div class="card">
+<h2 style="margin-top:0">GST Settings</h2>
+<div class="muted" style="margin-bottom:15px">GST is fully editable. This tool does not decide which GST rate applies to an item.</div>
+<div class="formgrid">
+<div class="field"><label>Default GST %</label><input id="defaultGST" type="number" min="0" step="0.01"></div>
+<div class="field"><label>Restaurant/Business Name</label><input id="bizName"></div>
+<div class="field"><label>Address</label><input id="bizAddress"></div>
+<div class="field"><label>Next Bill Number</label><input id="nextNo" type="number" min="1"></div>
+</div>
+<button class="btn" style="margin-top:13px" onclick="saveSettings()">Save Settings</button>
+</div>
+</section>
+</main>
+</div>
+
+<div class="mobilebar">
+<button data-page="dashboard" class="active">▣<br>Home</button>
+<button data-page="billing">▤<br>Bill</button>
+<button data-page="stock">▦<br>Stock</button>
+<button data-page="history">◫<br>History</button>
+<button data-page="settings">⚙<br>GST</button>
+</div>
+
+<div id="modal" class="modal"><div id="modalbox" class="modalbox"></div></div>
+
+<script>
+const KEY='pdx_blank_pos_v2';
+let data=JSON.parse(localStorage.getItem(KEY)||'null')||{
+ folders:[], bills:[], settings:{defaultGST:0,bizName:'PDX Roshona Bilash',bizAddress:'',nextNo:1001}
+};
+let lines=[];
+const money=n=>'₹'+Number(n||0).toFixed(2);
+date.textContent=new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+
+document.querySelectorAll('[data-page]').forEach(btn=>btn.onclick=()=>go(btn.dataset.page));
+function go(page){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ document.getElementById(page).classList.add('active');
+ document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
+ title.textContent={dashboard:'Dashboard',billing:'New Bill',stock:'Stock',history:'Sales History',settings:'GST & Settings'}[page];
+ if(page==='dashboard')renderDash();
+ if(page==='billing'){billGST.value=data.settings.defaultGST;billNo.textContent=data.settings.nextNo;renderLines();calcBill()}
+ if(page==='stock')renderFolders();
+ if(page==='settings')loadSettings();
+}
+function save(){localStorage.setItem(KEY,JSON.stringify(data))}
+function renderDash(){
+ let today=new Date().toDateString(), bs=data.bills.filter(b=>new Date(b.time).toDateString()===today);
+ dSales.textContent=money(bs.reduce((s,b)=>s+b.total,0));
+ dBills.textContent=bs.length;
+ dItems.textContent=bs.reduce((s,b)=>s+b.items.reduce((q,i)=>q+i.qty,0),0);
+ dFolders.textContent=data.folders.length;
+ recent.innerHTML=bs.slice(-10).reverse().map(b=>`<tr><td><button class="btn gray" onclick="viewBill(${b.no})">#${b.no}</button></td><td>${new Date(b.time).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</td><td>${b.items.length}</td><td>${money(b.total)}</td></tr>`).join('')||'<tr><td colspan="4" class="muted" style="padding:25px;text-align:center">No bills today</td></tr>';
+}
+function addLine(){lines.push({name:'',qty:1,price:0});renderLines();calcBill()}
+function removeLine(i){lines.splice(i,1);renderLines();calcBill()}
+function renderLines(){
+ emptyLine.style.display=lines.length?'none':'block';
+ linesEl=document.getElementById('lines');
+ linesEl.innerHTML=lines.map((x,i)=>`<div class="lineitem">
+<input placeholder="Item name" value="${esc(x.name)}" oninput="lines[${i}].name=this.value">
+<input type="number" min="0" step="1" placeholder="Qty" value="${x.qty}" oninput="lines[${i}].qty=Number(this.value||0);calcBill()">
+<input type="number" min="0" step="0.01" placeholder="Rate" value="${x.price}" oninput="lines[${i}].price=Number(this.value||0);calcBill()">
+<button class="remove" onclick="removeLine(${i})">×</button></div>`).join('');
+}
+function esc(s){return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;')}
+function calcBill(){
+ let sub=lines.reduce((a,x)=>a+(Number(x.qty)||0)*(Number(x.price)||0),0), rate=Number(billGST.value||0), gst=sub*rate/100;
+ bSub.textContent=money(sub);bGST.textContent=money(gst);bGrand.textContent=money(sub+gst);
+}
+function clearBill(){lines=[];renderLines();calcBill()}
+function saveBill(){
+ let valid=lines.filter(x=>x.name.trim()&&x.qty>0);
+ if(!valid.length)return alert('Add at least one item.');
+ let rate=Number(billGST.value||0), sub=valid.reduce((a,x)=>a+x.qty*x.price,0), gst=sub*rate/100;
+ let bill={no:data.settings.nextNo++,time:new Date().toISOString(),items:valid.map(x=>({name:x.name.trim(),qty:x.qty,price:x.price})),gstRate:rate,subtotal:sub,gst,total:sub+gst,payment:payment.value};
+ data.bills.push(bill);save();printBill(bill);clearBill();billNo.textContent=data.settings.nextNo;renderDash();
+}
+function printBill(b){
+ let w=window.open('','_blank','width=420,height=700');if(!w)return;
+ let name=data.settings.bizName||'PDX Roshona Bilash',addr=data.settings.bizAddress||'';
+ w.document.write(`<html><head><title>Bill #${b.no}</title><style>body{font-family:Arial;padding:20px}h2{text-align:center;margin:0}.c{text-align:center;color:#666;font-size:12px}table{width:100%;border-collapse:collapse;margin-top:16px}td{padding:7px 0;border-bottom:1px dashed #aaa}.r{text-align:right}.tot{font-weight:bold;font-size:18px}</style></head><body><h2>${esc(name)}</h2><div class="c">${esc(addr)}</div><div class="c">Bill #${b.no} · ${new Date(b.time).toLocaleString()}</div><table>${b.items.map(i=>`<tr><td>${esc(i.name)} × ${i.qty}</td><td class="r">${money(i.qty*i.price)}</td></tr>`).join('')}<tr><td>Subtotal</td><td class="r">${money(b.subtotal)}</td></tr><tr><td>GST (${b.gstRate}%)</td><td class="r">${money(b.gst)}</td></tr><tr class="tot"><td>Total</td><td class="r">${money(b.total)}</td></tr></table><p>Payment: ${esc(b.payment)}</p><p style="text-align:center;margin-top:35px">Thank you! Visit again.</p><script>window.print()<\/script></body></html>`);w.document.close();
+}
+function openFolder(folderIndex=null){
+ let f=folderIndex===null?null:data.folders[folderIndex];
+ modal.classList.add('open');
+ modalbox.innerHTML=`<button class="close" onclick="closeModal()">×</button><h2>${f?'Edit':'New'} Stock Folder</h2>
+ <div class="field"><label>Folder name</label><input id="folderName" class="input" style="width:100%" value="${f?esc(f.name):''}" placeholder="Example: Snacks, Drinks, Raw Materials"></div>
+ <div style="margin-top:14px"><button class="btn" onclick="saveFolder(${folderIndex===null?-1:folderIndex})">Save Folder</button></div>`;
+}
+function saveFolder(i){
+ let name=folderName.value.trim();if(!name)return alert('Enter a folder name');
+ if(i<0)data.folders.push({name,items:[]});else data.folders[i].name=name;
+ save();closeModal();renderFolders();
+}
+function renderFolders(){
+ folders.innerHTML=data.folders.map((f,i)=>`<div class="folder"><b>📁 ${esc(f.name)}</b><div class="muted">${f.items.length} stock entries</div><div style="margin-top:11px"><button class="btn" onclick="openStock(${i})">Open</button> <button class="btn gray" onclick="openFolder(${i})">Edit</button></div></div>`).join('')||'<div class="card" style="grid-column:1/-1;text-align:center;color:#777">No folders yet. Create one and start typing your stock.</div>';
+}
+function openStock(i){
+ let f=data.folders[i];
+ modal.classList.add('open');
+ modalbox.innerHTML=`<button class="close" onclick="closeModal()">×</button><h2>📁 ${esc(f.name)}</h2>
+ <div class="toolbar"><button class="btn" onclick="addStockRow(${i})">+ Add Stock Item</button></div>
+ <div class="muted" style="margin-bottom:10px">Everything is manual here. Enter product name, quantity, unit, cost and optional GST yourself.</div>
+ <div id="stockRows">${f.items.map((x,j)=>stockRow(i,j,x)).join('')}</div>`;
+}
+function stockRow(fi,ji,x){return `<div style="display:grid;grid-template-columns:1.5fr .7fr .8fr .9fr .7fr 34px;gap:7px;margin:7px 0">
+<input class="input" placeholder="Item name" value="${esc(x.name)}" onchange="stockEdit(${fi},${ji},'name',this.value)">
+<input class="input" type="number" placeholder="Qty" value="${x.qty}" onchange="stockEdit(${fi},${ji},'qty',this.value)">
+<input class="input" placeholder="Unit" value="${esc(x.unit)}" onchange="stockEdit(${fi},${ji},'unit',this.value)">
+<input class="input" type="number" step="0.01" placeholder="Cost/unit" value="${x.cost}" onchange="stockEdit(${fi},${ji},'cost',this.value)">
+<input class="input" type="number" step="0.01" placeholder="GST %" value="${x.gst}" onchange="stockEdit(${fi},${ji},'gst',this.value)">
+<button class="remove" onclick="deleteStock(${fi},${ji})">×</button></div>`}
+function addStockRow(i){data.folders[i].items.push({name:'',qty:0,unit:'',cost:0,gst:data.settings.defaultGST});save();openStock(i)}
+function stockEdit(fi,ji,key,val){let x=data.folders[fi].items[ji];x[key]=(key==='name'||key==='unit')?val:(Number(val)||0);save()}
+function deleteStock(fi,ji){data.folders[fi].items.splice(ji,1);save();openStock(fi)}
+
+function renderHistory(){
+  const q=(document.getElementById('historySearch').value||'').trim().toLowerCase();
+  const from=document.getElementById('historyFrom').value;
+  const to=document.getElementById('historyTo').value;
+  let bills=[...data.bills].sort((a,b)=>new Date(b.time)-new Date(a.time));
+
+  bills=bills.filter(b=>{
+    const d=new Date(b.time);
+    const day=d.toISOString().slice(0,10);
+    const itemText=b.items.map(i=>i.name).join(' ').toLowerCase();
+    const searchable=[String(b.no),b.payment||'',itemText].join(' ').toLowerCase();
+    return (!q || searchable.includes(q)) &&
+           (!from || day>=from) &&
+           (!to || day<=to);
+  });
+
+  hSales.textContent=money(bills.reduce((s,b)=>s+b.total,0));
+  hBills.textContent=bills.length;
+  hItems.textContent=bills.reduce((s,b)=>s+b.items.reduce((q,i)=>q+(Number(i.qty)||0),0),0);
+  hGST.textContent=money(bills.reduce((s,b)=>s+(Number(b.gst)||0),0));
+
+  historyTable.innerHTML=bills.map(b=>{
+    const d=new Date(b.time);
+    return `<tr>
+      <td>#${b.no}</td>
+      <td>${d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})}</td>
+      <td>${d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</td>
+      <td>${b.items.reduce((s,i)=>s+(Number(i.qty)||0),0)}</td>
+      <td>${money(b.subtotal)}</td>
+      <td>${money(b.gst)} <span class="muted">(${b.gstRate||0}%)</span></td>
+      <td><b>${money(b.total)}</b></td>
+      <td>${esc(b.payment||'')}</td>
+      <td><button class="btn gray" onclick="viewBill(${b.no})">View</button></td>
+    </tr>`
+  }).join('') || '<tr><td colspan="9" class="muted" style="padding:30px;text-align:center">No bills found for the selected filters.</td></tr>';
+}
+function clearHistoryFilters(){
+  historySearch.value='';historyFrom.value='';historyTo.value='';renderHistory();
+}
+function viewBill(no){
+  const b=data.bills.find(x=>x.no===no); if(!b)return;
+  modal.classList.add('open');
+  modalbox.innerHTML=`<button class="close" onclick="closeModal()">×</button>
+    <h2>Bill #${b.no}</h2>
+    <div class="muted">${new Date(b.time).toLocaleString('en-IN')}</div>
+    <div class="tablewrap" style="margin-top:14px">
+      <table style="min-width:0">
+        <thead><tr><th>Item</th><th>Qty</th><th>Rate</th><th>Total</th></tr></thead>
+        <tbody>${b.items.map(i=>`<tr><td>${esc(i.name)}</td><td>${i.qty}</td><td>${money(i.price)}</td><td>${money(i.qty*i.price)}</td></tr>`).join('')}</tbody>
+      </table>
+    </div>
+    <div class="totals">
+      <div class="row"><span>Subtotal</span><b>${money(b.subtotal)}</b></div>
+      <div class="row"><span>GST (${b.gstRate||0}%)</span><b>${money(b.gst)}</b></div>
+      <div class="row"><span>Payment</span><b>${esc(b.payment||'')}</b></div>
+      <div class="row"><span>Grand Total</span><b class="grand">${money(b.total)}</b></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="btn" onclick="closeModal();printBill(data.bills.find(x=>x.no===${b.no}))">Print Again</button>
+      <button class="btn red" onclick="deleteBill(${b.no})">Delete Bill</button>
+    </div>`;
+}
+function deleteBill(no){
+  if(!confirm('Delete this saved bill permanently?'))return;
+  data.bills=data.bills.filter(b=>b.no!==no);
+  save();closeModal();renderHistory();renderDash();
+}
+
+function loadSettings(){defaultGST.value=data.settings.defaultGST;bizName.value=data.settings.bizName;bizAddress.value=data.settings.bizAddress;nextNo.value=data.settings.nextNo}
+function saveSettings(){data.settings.defaultGST=Number(defaultGST.value||0);data.settings.bizName=bizName.value.trim()||'PDX Roshona Bilash';data.settings.bizAddress=bizAddress.value.trim();data.settings.nextNo=Math.max(1,Number(nextNo.value||1001));save();alert('Settings saved');go('dashboard')}
+function closeModal(){modal.classList.remove('open')}
+modal.onclick=e=>{if(e.target===modal)closeModal()}
+go('dashboard');
+</script>
+</body>
+</html>
